@@ -13,6 +13,7 @@ export const dynamoDbRepo = new DynamoRepositoryImpl({
   }),
   config: {
     fusionTable: process.env.FUSION_TABLE!,
+    fusionPageSize: Number(process.env.FUSION_PAGE_SIZE!),
   },
 })
 
