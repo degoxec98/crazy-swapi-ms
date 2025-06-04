@@ -1,4 +1,5 @@
 import { Fusion } from "../domains/Fusion";
+import { FusionFilter } from "../domains/FusionFilter";
 import { DynamoRepository } from "../repositories/DynamoRepository";
 import { SwapiRepository } from "../repositories/SwapiRepository";
 import { WeatherRepository } from "../repositories/WeatherRepository";
@@ -35,6 +36,26 @@ export class SwapiServiceImpl implements SwapiService {
     } catch (error) {
       console.error("Error in findFusion:", error);
       throw new Error("Failed to find fusion");
+    }
+  }
+
+  async findHistory(nextToken: string): Promise<FusionFilter> {
+    try {
+      const fusionFilter = await this.props.dynamoDbRepo.findFusionsByFilter(nextToken);
+      return fusionFilter;
+    } catch (error) {
+      console.error("Error in findHistory:", error);
+      throw new Error("Failed to find history");
+    }
+  }
+
+  async createFusion(fusion: Fusion): Promise<Fusion> {
+    try {
+      const createdFusion = await this.props.dynamoDbRepo.createFusion(fusion);
+      return createdFusion;
+    } catch (error) {
+      console.error("Error in createFusion:", error);
+      throw new Error("Failed to create fusion");
     }
   }
 

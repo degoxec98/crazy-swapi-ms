@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { SwapiService } from "../services/SwapiService";
+import { Fusion } from "../domains/Fusion";
 
 export interface SwapiControllerProps {
   service: SwapiService;
@@ -18,18 +19,33 @@ export class SwapiController {
   }
 
   async findHistory(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
-    // TODO: Implement the logic to find history
+    const nextToken = event.queryStringParameters?.nextToken || undefined;
+
+    const response = await this.props.service.findHistory(nextToken);
+
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: "History found successfully" }),
+      body: JSON.stringify(response),
     };
   }
 
   async createStore(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
-    // TODO: Implement the logic to create a store
+    const body = JSON.parse(event.body || "{}");
+    const fusion = Fusion.instanceForCreate({
+      custom: {
+        name: body.custom?.name,
+        species: body.custom?.species,
+        gender: body.custom?.gender,
+        age: body.custom?.age,
+        description: body.custom?.description,
+      },
+    });
+
+    const response = await this.props.service.createFusion(fusion);
+    
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: "Store created successfully" }),
+      body: JSON.stringify(response),
     }
   }
 }

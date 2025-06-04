@@ -1,0 +1,203 @@
+openapi: 3.0.0
+info:
+  title: Crazy Swapi API
+  version: 1.0.0
+paths:
+  /store:
+    post:
+      summary: Custom Fusion creation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                custom:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    species:
+                      type: string
+                    gender:
+                      type: string
+                    age:
+                      type: number
+                    description:
+                      type: string
+      responses:
+        "200":
+          description: Custom Fusion created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  custom:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      species:
+                        type: string
+                      gender:
+                        type: string
+                      age:
+                        type: number
+                      description:
+                        type: string
+                  id:
+                    type: string
+                  creationDate:
+                    type: number
+                  lastUpdateDate:
+                    type: number
+  /fusion:
+    get:
+      summary: Get fusion
+      responses:
+        "200":
+          description: Fusion from SWAPI (character and planet) and Open Meteo API (weather)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  creationDate:
+                    type: number
+                  lastUpdateDate:
+                    type: number
+                  character:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      name:
+                        type: string
+                      height:
+                        type: string
+                      mass:
+                        type: string
+                      gender:
+                        type: string
+                      homeworld:
+                        type: string
+                  planet:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      name:
+                        type: string
+                      population:
+                        type: string
+                      diameter:
+                        type: string
+                      gravity:
+                        type: string
+                      terrain:
+                        type: string
+                  weather:
+                    type: object
+                    properties:
+                      latitude:
+                        type: number
+                      longitude:
+                        type: number
+                      elevation:
+                        type: number
+                      time: 
+                        type: string
+                      temperature:  
+                        type: string
+                      windspeed:
+                        type: string
+                      winddirection:
+                        type: string
+  /history:
+    get:
+      summary: Get history of fusions
+      responses:
+        "200":
+          description: List of fusions created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nextToken:
+                    type: string
+                  items:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: string
+                        creationDate:
+                          type: number
+                        lastUpdateDate:
+                          type: number
+                        character:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                            name:
+                              type: string
+                            height:
+                              type: string
+                            mass:
+                              type: string
+                            gender:
+                              type: string
+                            homeworld:
+                              type: string
+                        planet:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            name:
+                              type: string
+                            population:
+                              type: string
+                            diameter:
+                              type: string
+                            gravity:
+                              type: string
+                            terrain:
+                              type: string
+                        weather:
+                          type: object
+                          properties:
+                            latitude:
+                              type: number
+                            longitude:
+                              type: number
+                            elevation:
+                              type: number
+                            time: 
+                              type: string
+                            temperature:  
+                              type: string
+                            windspeed:
+                              type: string
+                            winddirection:
+                              type: string
+                        custom:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            species:
+                              type: string
+                            gender:
+                              type: string
+                            age:
+                              type: number
+                            description:
+                              type: string
+                            

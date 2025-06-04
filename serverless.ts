@@ -17,6 +17,7 @@ const serverlessConfiguration: AWS = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       SWAPI_BASE_URL: "https://swapi.info/api/",
       WEATHER_BASE_URL: "https://api.open-meteo.com/v1/",
+      FUSION_PAGE_SIZE: "5",
     },
     iamRoleStatements: [
       {
@@ -26,7 +27,15 @@ const serverlessConfiguration: AWS = {
           "dynamodb:GetItem",
           "dynamodb:Query",
         ],
-        Resource: { "Fn::GetAtt": ["FusionTable", "Arn"] },
+        Resource: [
+          { "Fn::GetAtt": ["FusionTable", "Arn"] },
+          {
+            "Fn::Join": [
+              "/",
+              [{ "Fn::GetAtt": ["FusionTable", "Arn"] }, "index", "creationDateIndex"]
+            ]
+          }
+        ],
       }
     ]
   },
@@ -41,6 +50,20 @@ const serverlessConfiguration: AWS = {
             method: "get",
             cors: true
           }
+        },
+        {
+          http: {
+            path: "history",
+            method: "get",
+            cors: true
+          }
+        },
+        {
+          http: {
+            path: "store",
+            method: "post",
+            cors: true
+          }
         }
       ],
     },
@@ -53,10 +76,22 @@ const serverlessConfiguration: AWS = {
         Properties: {
           TableName: "FusionTable",
           AttributeDefinitions: [
-            { AttributeName: "id", AttributeType: "S" }
+            { AttributeName: "id", AttributeType: "S" },
+            { AttributeName: "partition", AttributeType: "S" },
+            { AttributeName: "creationDate", AttributeType: "N" }
           ],
           KeySchema: [
             { AttributeName: "id", KeyType: "HASH" }
+          ],
+          GlobalSecondaryIndexes: [
+            {
+              IndexName: "creationDateIndex",
+              KeySchema: [
+                { AttributeName: "partition", KeyType: "HASH" },
+                { AttributeName: "creationDate", KeyType: "RANGE" }
+              ],
+              Projection: { ProjectionType: "ALL" },
+            }
           ],
           BillingMode: "PAY_PER_REQUEST"
         }
