@@ -39,7 +39,7 @@ export class SwapiServiceImpl implements SwapiService {
     }
   }
 
-  async findHistory(nextToken: string): Promise<FusionFilter> {
+  async findHistory(nextToken?: string): Promise<FusionFilter> {
     try {
       const fusionFilter = await this.props.dynamoDbRepo.findFusionsByFilter(nextToken);
       return fusionFilter;
@@ -59,15 +59,15 @@ export class SwapiServiceImpl implements SwapiService {
     }
   }
 
-  private getRandomCharacterCode(): string {
+  protected getRandomCharacterCode(): string {
     return (Math.floor(Math.random() * 83) + 1).toString(); // 1 to 83
   }
 
-  private getRandomLatitude(): number {
+  protected getRandomLatitude(): number {
     return +(Math.random() * 120 - 60).toFixed(1);  // -60 to +60
   }
    
-  private getRandomLongitude(): number {
+  protected getRandomLongitude(): number {
    return +(Math.random() * 300 - 150).toFixed(1); // -150 to +150
   }
 }
